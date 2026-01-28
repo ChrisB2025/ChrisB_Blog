@@ -39,23 +39,33 @@ else:
 
 # Fix any local image URLs to use WordPress URLs
 import re
+print('Checking for local image URLs to fix...')
 fixed_count = 0
 for post in Post.objects.all():
-    original_md = post.content_md
-    # Replace local /uploads/ URLs with WordPress URLs
+    original_md = post.content_md or ''
+    original_html = post.content_html or ''
+
+    # Check if this post has local uploads URLs
+    has_local_url = '/uploads/' in original_md or '/uploads/' in original_html
+    if has_local_url:
+        print(f'Found local URL in: {post.title}')
+
+    # Replace local /uploads/ URLs with WordPress URLs (handles both md and html formats)
     new_md = re.sub(
-        r'/uploads/images/(\d{4}/\d{2}/[^)\s"\']+)',
+        r'/uploads/images/(\d{4}/\d{2}/[^)\s"\'<>]+)',
         r'https://chrisblanduk.wordpress.com/wp-content/uploads/\1',
         original_md
     )
     if new_md != original_md:
         post.content_md = new_md
-        post.save()
+        post.save()  # This regenerates content_html
         fixed_count += 1
         print(f'Fixed image URLs in: {post.title}')
 
 if fixed_count:
     print(f'Fixed {fixed_count} posts with local image URLs.')
+else:
+    print('No posts needed fixing.')
 PYTHON_SCRIPT
 
 echo "Starting gunicorn on port $PORT..."
