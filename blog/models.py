@@ -192,12 +192,7 @@ class Post(models.Model):
 
     @property
     def thumbnail_url(self):
-        """Get thumbnail URL - featured image or first image from content."""
-        if self.featured_image:
-            try:
-                return self.featured_image.file.url
-            except Exception:
-                pass
+        """Get thumbnail URL from post content."""
         return self.first_image_url
 
 
