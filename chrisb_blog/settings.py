@@ -187,6 +187,7 @@ MARKDOWN_EXTENSIONS = [
     'markdown.extensions.tables',
     'markdown.extensions.toc',
     'markdown.extensions.nl2br',
+    'markdown.extensions.footnotes',
 ]
 
 MARKDOWN_EXTENSION_CONFIGS = {

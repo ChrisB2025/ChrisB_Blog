@@ -153,6 +153,7 @@ class Post(models.Model):
             'strong', 'em', 'u', 's', 'blockquote', 'code', 'pre',
             'ul', 'ol', 'li', 'a', 'img', 'table', 'thead', 'tbody',
             'tr', 'th', 'td', 'div', 'span', 'hr',
+            'sup', 'sub',  # For footnotes
         ]
         allowed_attrs = {
             'a': ['href', 'title', 'target', 'rel'],

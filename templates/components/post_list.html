@@ -17,7 +17,7 @@
             {{ post.excerpt|default:post.content_md|truncatewords:30 }}
         </div>
         <div class="post-item-meta">
-            <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"m/d/Y" }}</time>
+            <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"Y/m/d" }}</time>
             in <a href="{% url 'blog:home' %}">Articles</a>.
         </div>
     </div>
