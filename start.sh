@@ -36,6 +36,26 @@ if Post.objects.count() == 0:
         print(f'WordPress XML not found at {xml_path}')
 else:
     print(f'Posts already exist ({Post.objects.count()}). Skipping WordPress import.')
+
+# Fix any local image URLs to use WordPress URLs
+import re
+fixed_count = 0
+for post in Post.objects.all():
+    original_md = post.content_md
+    # Replace local /uploads/ URLs with WordPress URLs
+    new_md = re.sub(
+        r'/uploads/images/(\d{4}/\d{2}/[^)\s"\']+)',
+        r'https://chrisblanduk.wordpress.com/wp-content/uploads/\1',
+        original_md
+    )
+    if new_md != original_md:
+        post.content_md = new_md
+        post.save()
+        fixed_count += 1
+        print(f'Fixed image URLs in: {post.title}')
+
+if fixed_count:
+    print(f'Fixed {fixed_count} posts with local image URLs.')
 PYTHON_SCRIPT
 
 echo "Starting gunicorn on port $PORT..."
