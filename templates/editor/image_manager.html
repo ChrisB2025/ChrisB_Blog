@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Image Manager - ChrisB Blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Image Manager</h1>
+    <p>
+        <a href="{% url 'editor:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        <a href="{% url 'imagen:generator' %}" class="btn btn-secondary">AI Image Generator</a>
+    </p>
+</div>
+
+<div class="upload-form">
+    <h2>Upload New Image</h2>
+    <form method="post" enctype="multipart/form-data"
+          hx-post="{% url 'editor:image_manager' %}"
+          hx-target="#image-grid"
+          hx-swap="afterbegin"
+          hx-encoding="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="id_file" class="form-label">Image File</label>
+                <input type="file" name="file" id="id_file" class="form-input" accept="image/*" required>
+            </div>
+
+            <div class="form-group">
+                <label for="id_alt_text" class="form-label">Alt Text</label>
+                <input type="text" name="alt_text" id="id_alt_text" class="form-input"
+                       placeholder="Description for accessibility">
+            </div>
+
+            <div class="form-group">
+                <label for="id_caption" class="form-label">Caption</label>
+                <input type="text" name="caption" id="id_caption" class="form-input"
+                       placeholder="Optional caption">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </div>
+    </form>
+</div>
+
+<h2>All Images</h2>
+<div class="image-grid" id="image-grid">
+    {% for image in images %}
+    {% include 'components/image_item.html' %}
+    {% empty %}
+    <p>No images uploaded yet.</p>
+    {% endfor %}
+</div>
+
+<style>
+.upload-form {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 4px;
+    margin-bottom: 2rem;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-end;
+    flex-wrap: wrap;
+}
+
+.form-row .form-group {
+    flex: 1;
+    min-width: 200px;
+}
+</style>
+{% endblock %}

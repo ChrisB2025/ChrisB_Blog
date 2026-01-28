@@ -1,0 +1,23 @@
+{% load static %}
+
+<article class="post-item">
+    {% if post.featured_image %}
+    <div class="post-thumbnail">
+        <a href="{{ post.get_absolute_url }}">
+            <img src="{{ post.featured_image.file.url }}" alt="{{ post.featured_image.alt_text|default:post.title }}">
+        </a>
+    </div>
+    {% endif %}
+    <div class="post-item-content">
+        <h2 class="post-item-title">
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </h2>
+        <div class="post-item-excerpt">
+            {{ post.excerpt|default:post.content_md|truncatewords:30 }}
+        </div>
+        <div class="post-item-meta">
+            <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"m/d/Y" }}</time>
+            in <a href="{% url 'blog:home' %}">Articles</a>.
+        </div>
+    </div>
+</article>

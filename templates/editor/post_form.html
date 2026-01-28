@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if is_new %}New Post{% else %}Edit: {{ post.title }}{% endif %} - ChrisB Blog{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://unpkg.com/easymde/dist/easymde.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">{% if is_new %}New Post{% else %}Edit Post{% endif %}</h1>
+    <p>
+        <a href="{% url 'editor:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+        {% if not is_new %}
+        <a href="{{ post.get_absolute_url }}" class="btn btn-secondary" target="_blank">View Post</a>
+        {% endif %}
+    </p>
+</div>
+
+<div class="editor-form">
+    <form method="post"
+          hx-post="{% if is_new %}{% url 'editor:post_create' %}{% else %}{% url 'editor:post_edit' pk=post.pk %}{% endif %}"
+          hx-target="#save-status"
+          hx-swap="innerHTML">
+        {% csrf_token %}
+
+        <div class="form-grid">
+            <div class="form-main">
+                <div class="form-group">
+                    <label for="id_title" class="form-label">Title</label>
+                    <input type="text" name="title" id="id_title" class="form-input"
+                           value="{{ form.title.value|default:'' }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_slug" class="form-label">Slug</label>
+                    <input type="text" name="slug" id="id_slug" class="form-input"
+                           value="{{ form.slug.value|default:'' }}"
+                           placeholder="auto-generated if blank">
+                </div>
+
+                <div class="form-group">
+                    <label for="id_content_md" class="form-label">Content (Markdown)</label>
+                    <textarea name="content_md" id="id_content_md" class="markdown-editor">{{ form.content_md.value|default:'' }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_excerpt" class="form-label">Excerpt</label>
+                    <textarea name="excerpt" id="id_excerpt" class="form-textarea" rows="3"
+                              placeholder="Brief summary for previews...">{{ form.excerpt.value|default:'' }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-sidebar">
+                <div class="form-group">
+                    <label for="id_status" class="form-label">Status</label>
+                    <select name="status" id="id_status" class="form-select">
+                        {% for value, label in form.fields.status.choices %}
+                        <option value="{{ value }}" {% if form.status.value == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_published_at" class="form-label">Publish Date</label>
+                    <input type="datetime-local" name="published_at" id="id_published_at" class="form-input"
+                           value="{{ form.published_at.value|date:'Y-m-d\TH:i'|default:'' }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags</label>
+                    <div class="tag-checkboxes">
+                        {% for tag in form.tags.field.queryset %}
+                        <label class="tag-checkbox-label">
+                            <input type="checkbox" name="tags" value="{{ tag.pk }}"
+                                   {% if tag.pk in form.tags.value %}checked{% endif %}>
+                            {{ tag.name }}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Featured Image</label>
+                    <div id="featured-image-preview">
+                        {% if post.featured_image %}
+                        <img src="{{ post.featured_image.file.url }}" alt="" style="max-width: 100%;">
+                        {% endif %}
+                    </div>
+                    {% if not is_new %}
+                    <button type="button" class="btn btn-secondary"
+                            hx-get="{% url 'editor:image_select' post_pk=post.pk %}"
+                            hx-target="#image-modal"
+                            hx-swap="innerHTML">
+                        Select Image
+                    </button>
+                    <button type="button" class="btn btn-secondary"
+                            hx-post="{% url 'imagen:generate_cover' post_pk=post.pk %}"
+                            hx-target="#ai-status"
+                            hx-swap="innerHTML">
+                        Generate with AI
+                    </button>
+                    <div id="ai-status"></div>
+                    {% endif %}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        {% if is_new %}Create Post{% else %}Save Changes{% endif %}
+                    </button>
+                    <span id="save-status"></span>
+                </div>
+
+                {% if not is_new %}
+                <div class="form-group danger-zone">
+                    <button type="button" class="btn btn-danger"
+                            hx-delete="{% url 'editor:post_delete' pk=post.pk %}"
+                            hx-confirm="Are you sure you want to delete this post?">
+                        Delete Post
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="image-modal"></div>
+
+<style>
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+}
+
+.form-sidebar {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 4px;
+}
+
+.tag-checkboxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.tag-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.form-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+}
+
+.danger-zone {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dc3545;
+}
+
+@media (max-width: 968px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/easymde/dist/easymde.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var easyMDE = new EasyMDE({
+        element: document.getElementById('id_content_md'),
+        spellChecker: false,
+        autosave: {
+            enabled: true,
+            uniqueId: 'post-editor-{{ post.pk|default:"new" }}',
+            delay: 1000,
+        },
+        toolbar: [
+            'bold', 'italic', 'heading', '|',
+            'quote', 'unordered-list', 'ordered-list', '|',
+            'link', 'image', 'code', '|',
+            'preview', 'side-by-side', 'fullscreen', '|',
+            'guide'
+        ],
+    });
+
+    // Auto-generate slug from title
+    var titleInput = document.getElementById('id_title');
+    var slugInput = document.getElementById('id_slug');
+
+    titleInput.addEventListener('input', function() {
+        if (!slugInput.value) {
+            var slug = titleInput.value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-|-$/g, '');
+            slugInput.value = slug;
+        }
+    });
+});
+</script>
+{% endblock %}

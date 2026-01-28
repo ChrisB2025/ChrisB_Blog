@@ -1,0 +1,27 @@
+{% if ready %}
+    {% if error %}
+    <div class="generation-status error">
+        <p>Generation failed: {{ error }}</p>
+    </div>
+    {% elif image_url %}
+    <div class="generation-status success">
+        <p>Image generated successfully!</p>
+        <img src="{{ image_url }}" alt="Generated image" class="generated-image">
+        <p>
+            <a href="{% url 'editor:image_manager' %}" class="btn btn-secondary">View in Image Manager</a>
+        </p>
+    </div>
+    {% else %}
+    <div class="generation-status error">
+        <p>Generation completed but no image was created.</p>
+    </div>
+    {% endif %}
+{% else %}
+<div class="generation-status pending"
+     hx-get="{% url 'imagen:check_task' task_id=task_id %}"
+     hx-trigger="every 2s"
+     hx-swap="outerHTML">
+    <p>Status: {{ status }}</p>
+    <div class="loading-spinner"></div>
+</div>
+{% endif %}

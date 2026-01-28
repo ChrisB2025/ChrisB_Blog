@@ -1,0 +1,18 @@
+<span class="save-status success">Saved!</span>
+<style>
+.save-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 3px;
+    font-size: 0.875rem;
+    animation: fadeOut 3s forwards;
+}
+.save-status.success {
+    background: #d4edda;
+    color: #155724;
+}
+@keyframes fadeOut {
+    0%, 80% { opacity: 1; }
+    100% { opacity: 0; }
+}
+</style>

@@ -1,0 +1,19 @@
+<div class="comment" id="comment-{{ comment.pk }}">
+    <div class="comment-header">
+        <span class="comment-author">{{ comment.author_name }}</span>
+        <span class="comment-date">{{ comment.created_at|date:"F j, Y \a\t g:i a" }}</span>
+    </div>
+    <div class="comment-content">
+        {{ comment.content|linebreaks }}
+    </div>
+
+    {% if comment.replies.exists %}
+    <div class="comment-replies">
+        {% for reply in comment.replies.all %}
+        {% if reply.is_approved %}
+        {% include 'components/comment.html' with comment=reply %}
+        {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>

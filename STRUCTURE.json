@@ -1,0 +1,68 @@
+{
+  "_frame_metadata": {
+    "purpose": "Project structure and module map for AI assistants",
+    "forClaude": "Read this file FIRST when starting work on this project. It contains the module structure, data flow, and conventions. Update this file when you add new modules or change the architecture.",
+    "lastUpdated": "2026-01-28",
+    "generatedBy": "Frame"
+  },
+  "version": "1.0",
+  "description": "ChrisB Blog - Self-hosted Django blog with HTMX, migrated from WordPress",
+  "architecture": {
+    "type": "Django monolith with HTMX",
+    "entryPoint": "manage.py",
+    "notes": "Django 5.x with PostgreSQL, Redis for caching/sessions, Celery for async tasks"
+  },
+  "modules": {
+    "chrisb_blog": {
+      "path": "chrisb_blog/",
+      "purpose": "Django project configuration (settings, URLs, WSGI, Celery)",
+      "depends": []
+    },
+    "blog": {
+      "path": "blog/",
+      "purpose": "Core blog functionality - models (Post, Tag, Comment, Image), views, feeds",
+      "depends": []
+    },
+    "editor": {
+      "path": "editor/",
+      "purpose": "Admin editor interface with HTMX-powered markdown editing",
+      "depends": ["blog"]
+    },
+    "imagen": {
+      "path": "imagen/",
+      "purpose": "AI image generation using Google Vertex AI Imagen 4",
+      "depends": ["blog"]
+    },
+    "analytics": {
+      "path": "analytics/",
+      "purpose": "Simple page view tracking with middleware",
+      "depends": ["blog"]
+    },
+    "templates": {
+      "path": "templates/",
+      "purpose": "Django templates - base, blog views, editor, components",
+      "depends": []
+    },
+    "static": {
+      "path": "static/",
+      "purpose": "CSS styles (WordPress theme match), JS files",
+      "depends": []
+    },
+    "scripts": {
+      "path": "scripts/",
+      "purpose": "Migration scripts for WordPress import",
+      "depends": ["blog"]
+    }
+  },
+  "dataFlow": [
+    "User request -> Django middleware -> View -> Template -> Response",
+    "HTMX request -> View -> Partial template -> HTMX swap",
+    "AI image generation -> Celery task -> Vertex AI -> Image model"
+  ],
+  "conventions": {
+    "templates": "templates/{app_name}/ for full pages, templates/components/ for partials",
+    "styling": "WordPress theme colors: bg=#56001E, nav=#D01C01, link=#A30006",
+    "database": "PostgreSQL in production, SQLite for development",
+    "caching": "Redis for cache/sessions in production, local memory for development"
+  }
+}

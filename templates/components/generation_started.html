@@ -1,0 +1,13 @@
+<div class="generation-status pending"
+     hx-get="{% url 'imagen:check_task' task_id=task_id %}"
+     hx-trigger="every 2s"
+     hx-swap="outerHTML">
+    <p>Generating image... This may take a moment.</p>
+    <div class="loading-spinner"></div>
+    {% if prompt %}
+    <p class="prompt-preview">Prompt: "{{ prompt|truncatewords:20 }}"</p>
+    {% endif %}
+    {% if post %}
+    <p>For post: {{ post.title }}</p>
+    {% endif %}
+</div>

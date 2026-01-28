@@ -1,0 +1,29 @@
+<div class="image-item" id="image-{{ image.pk }}">
+    <img src="{{ image.file.url }}" alt="{{ image.alt_text }}">
+    <div class="image-item-actions">
+        <button class="btn btn-danger btn-sm"
+                hx-delete="{% url 'editor:image_delete' pk=image.pk %}"
+                hx-target="#image-{{ image.pk }}"
+                hx-swap="outerHTML"
+                hx-confirm="Delete this image?">
+            Delete
+        </button>
+    </div>
+    {% if image.ai_generated %}
+    <span class="ai-badge" title="AI Generated">AI</span>
+    {% endif %}
+</div>
+
+<style>
+.ai-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #6c757d;
+    color: white;
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+</style>

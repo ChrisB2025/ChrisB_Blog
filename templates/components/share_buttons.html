@@ -1,0 +1,40 @@
+{% with url=request.build_absolute_uri title=post.title|urlencode %}
+<div class="share-buttons">
+    <a href="https://twitter.com/intent/tweet?url={{ url|urlencode }}&text={{ title }}"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="share-btn twitter">
+        Share on X
+    </a>
+    <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ url|urlencode }}"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="share-btn linkedin">
+        Share on LinkedIn
+    </a>
+    <a href="https://www.facebook.com/sharer/sharer.php?u={{ url|urlencode }}"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="share-btn facebook">
+        Share on Facebook
+    </a>
+    <button class="share-btn copy"
+            onclick="copyLink(this, '{{ url }}')"
+            data-url="{{ url }}">
+        Copy Link
+    </button>
+</div>
+
+<script>
+function copyLink(button, url) {
+    navigator.clipboard.writeText(url).then(function() {
+        button.textContent = 'Copied!';
+        button.classList.add('copied');
+        setTimeout(function() {
+            button.textContent = 'Copy Link';
+            button.classList.remove('copied');
+        }, 2000);
+    });
+}
+</script>
+{% endwith %}

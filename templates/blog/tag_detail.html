@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Posts tagged "{{ tag.name }}" - ChrisB's Blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Tag: {{ tag.name }}</h1>
+    <p class="page-description">{{ page_obj.paginator.count }} post{{ page_obj.paginator.count|pluralize }} with this tag</p>
+</div>
+
+<div class="post-list" id="post-list">
+    {% include 'components/post_list.html' %}
+</div>
+
+{% if page_obj.has_next %}
+<div class="pagination">
+    <a href="?page={{ page_obj.next_page_number }}" class="older-posts">&larr; Older posts</a>
+</div>
+{% endif %}
+{% endblock %}

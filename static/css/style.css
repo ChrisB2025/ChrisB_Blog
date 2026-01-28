@@ -1,0 +1,1205 @@
+/* ==========================================================================
+   ChrisB's Blog - WordPress Expound Theme Match
+   ========================================================================== */
+
+/* CSS Variables - WordPress Expound Theme Colors */
+:root {
+    --bg-primary: #56001E;          /* Dark burgundy background */
+    --nav-bg: #D01C01;              /* Red navigation */
+    --nav-hover: #B01801;           /* Darker red for hover */
+    --link-color: #D01C01;          /* Red links */
+    --link-hover: #A01501;          /* Darker red on hover */
+    --text-primary: #ffffff;
+    --text-dark: #333333;
+    --text-gray: #999999;
+    --card-bg: #ffffff;
+    --border-color: #e5e5e5;
+
+    /* Typography */
+    --font-family: Georgia, "Times New Roman", Times, serif;
+    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    --font-size-base: 16px;
+    --line-height: 1.7;
+
+    /* Layout */
+    --max-width: 1100px;
+    --sidebar-width: 300px;
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: var(--font-size-base);
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: var(--line-height);
+    color: var(--text-dark);
+    background-color: var(--bg-primary);
+    min-height: 100vh;
+}
+
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==========================================================================
+   Main Site Container - Single White Box
+   ========================================================================== */
+
+.site-wrapper {
+    max-width: var(--max-width);
+    margin: 40px auto;
+    background-color: var(--card-bg);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* ==========================================================================
+   Header - Inside White Container
+   ========================================================================== */
+
+.site-header {
+    background-color: var(--card-bg);
+}
+
+.site-branding-area {
+    padding: 40px 40px 30px;
+}
+
+.site-title {
+    font-family: var(--font-family);
+    font-size: 2.5rem;
+    font-weight: normal;
+    color: var(--link-color);
+    text-decoration: none;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.site-title:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+}
+
+.site-tagline {
+    font-family: var(--font-family);
+    font-size: 1rem;
+    color: var(--text-gray);
+    font-style: italic;
+    margin: 0;
+}
+
+/* ==========================================================================
+   Navigation Bar - Red Bar Inside Container
+   ========================================================================== */
+
+.main-nav {
+    background-color: var(--nav-bg);
+}
+
+.nav-container {
+    padding: 0 40px;
+}
+
+.nav-menu {
+    list-style: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-menu li {
+    position: relative;
+}
+
+.nav-menu a {
+    display: block;
+    color: var(--text-primary);
+    padding: 12px 20px;
+    font-family: var(--font-family-sans);
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.nav-menu a:hover {
+    background-color: var(--nav-hover);
+    text-decoration: none;
+}
+
+/* Active nav item with triangle indicator */
+.nav-menu li.active a {
+    background-color: var(--nav-hover);
+}
+
+.nav-menu li.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--nav-hover);
+    z-index: 10;
+}
+
+/* ==========================================================================
+   Main Content Area - Inside White Container
+   ========================================================================== */
+
+.site-main {
+    padding: 30px 40px 40px;
+}
+
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr var(--sidebar-width);
+    gap: 40px;
+}
+
+.content-area {
+    min-width: 0;
+}
+
+/* ==========================================================================
+   Featured Post (Homepage First Post)
+   ========================================================================== */
+
+.featured-post {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 30px;
+}
+
+.featured-image {
+    flex: 0 0 45%;
+    max-width: 45%;
+}
+
+.featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 280px;
+}
+
+.featured-content {
+    flex: 1;
+    padding: 0 0 0 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.featured-title {
+    font-family: var(--font-family);
+    font-size: 1.75rem;
+    font-weight: normal;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+
+.featured-title a {
+    color: var(--link-color);
+}
+
+.featured-title a:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+}
+
+.featured-excerpt {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.7;
+}
+
+.continue-reading {
+    display: inline-block;
+    background-color: var(--nav-bg);
+    color: var(--text-primary);
+    padding: 10px 20px;
+    font-family: var(--font-family-sans);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+}
+
+.continue-reading:hover {
+    background-color: var(--nav-hover);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+.continue-reading .arrow {
+    margin-left: 5px;
+}
+
+/* ==========================================================================
+   Post List (Non-Featured Posts)
+   ========================================================================== */
+
+.post-list {
+    padding: 0;
+}
+
+.post-item {
+    display: flex;
+    padding: 25px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+.post-thumbnail {
+    flex: 0 0 150px;
+    max-width: 150px;
+    margin-right: 25px;
+}
+
+.post-thumbnail img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+
+.post-item-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.post-item-title {
+    font-family: var(--font-family);
+    font-size: 1.4rem;
+    font-weight: normal;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.post-item-title a {
+    color: var(--link-color);
+}
+
+.post-item-title a:hover {
+    color: var(--link-hover);
+    text-decoration: none;
+}
+
+.post-item-excerpt {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.post-item-meta {
+    font-size: 0.85rem;
+    color: var(--text-gray);
+}
+
+.post-item-meta a {
+    color: var(--link-color);
+}
+
+/* ==========================================================================
+   Single Post
+   ========================================================================== */
+
+.post-single {
+    /* No background - inherits from container */
+}
+
+.post-header {
+    margin-bottom: 20px;
+}
+
+.post-title {
+    font-family: var(--font-family);
+    font-size: 2.25rem;
+    font-weight: normal;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.post-meta {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+}
+
+.post-meta .author {
+    color: var(--text-dark);
+    font-weight: normal;
+}
+
+.post-meta .separator {
+    margin: 0 5px;
+    color: var(--text-gray);
+}
+
+.post-featured-image-wrapper {
+    margin: 20px 0;
+}
+
+.post-featured-image {
+    width: 100%;
+    height: auto;
+}
+
+.post-content {
+    padding: 20px 0;
+}
+
+.post-content h2 {
+    font-family: var(--font-family);
+    font-size: 1.5rem;
+    font-weight: normal;
+    margin: 1.5rem 0 1rem;
+    color: var(--text-dark);
+}
+
+.post-content h3 {
+    font-family: var(--font-family);
+    font-size: 1.25rem;
+    font-weight: normal;
+    margin: 1.25rem 0 0.75rem;
+    color: var(--text-dark);
+}
+
+.post-content p {
+    margin-bottom: 1rem;
+}
+
+.post-content ul, .post-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.post-content li {
+    margin-bottom: 0.5rem;
+}
+
+.post-content blockquote {
+    border-left: 4px solid var(--nav-bg);
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #555;
+}
+
+.post-content pre {
+    background-color: #1e1e1e;
+    color: #f8f8f2;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.post-content code {
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9em;
+}
+
+.post-content p code {
+    background-color: #f0f0f0;
+    padding: 0.2em 0.4em;
+    border-radius: 3px;
+}
+
+.post-content img {
+    margin: 1.5rem auto;
+}
+
+/* Post Footer */
+.post-footer {
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1.5rem;
+}
+
+.post-tags {
+    margin-bottom: 1.5rem;
+}
+
+.post-tags .tag {
+    display: inline-block;
+    background-color: #f0f0f0;
+    color: var(--text-dark);
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.post-tags .tag:hover {
+    background-color: var(--nav-bg);
+    color: var(--text-primary);
+    text-decoration: none;
+}
+
+/* Post Navigation */
+.post-navigation {
+    padding: 20px 0;
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-navigation a {
+    color: var(--link-color);
+    font-size: 0.9rem;
+}
+
+.nav-previous {
+    margin-right: auto;
+}
+
+.nav-next {
+    margin-left: auto;
+}
+
+/* ==========================================================================
+   Sidebar - Expound Style (Inside Container)
+   ========================================================================== */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.widget {
+    /* No background - part of main container */
+}
+
+.widget-title {
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: bold;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    text-transform: none;
+}
+
+/* Search Widget */
+.widget-search .search-form {
+    display: flex;
+}
+
+.widget-search input[type="search"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+    font-size: 0.9rem;
+}
+
+.widget-search input[type="search"]:focus {
+    outline: none;
+    border-color: var(--nav-bg);
+}
+
+.widget-search input[type="search"]::placeholder {
+    color: #999;
+}
+
+/* Recent Posts Widget */
+.recent-posts-list {
+    list-style: none;
+}
+
+.recent-posts-list li {
+    padding: 5px 0;
+}
+
+.recent-posts-list a {
+    color: var(--link-color);
+    font-size: 0.95rem;
+}
+
+.recent-posts-list a:hover {
+    text-decoration: underline;
+}
+
+/* Categories Widget */
+.categories-list {
+    list-style: none;
+}
+
+.categories-list li {
+    padding: 5px 0;
+}
+
+.categories-list a {
+    color: var(--link-color);
+    font-size: 0.95rem;
+}
+
+/* ==========================================================================
+   Pagination
+   ========================================================================== */
+
+.pagination {
+    padding: 20px 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 20px;
+}
+
+.older-posts {
+    color: var(--link-color);
+    font-size: 0.95rem;
+}
+
+.older-posts:hover {
+    text-decoration: underline;
+}
+
+/* ==========================================================================
+   Footer - Simple text inside container
+   ========================================================================== */
+
+.site-footer {
+    padding: 30px 40px 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer-copyright {
+    font-size: 0.85rem;
+    color: #999;
+}
+
+.footer-copyright a {
+    color: #999;
+}
+
+.footer-copyright a:hover {
+    color: var(--link-color);
+}
+
+/* ==========================================================================
+   Comments Section
+   ========================================================================== */
+
+.comments-section {
+    padding: 30px 0;
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.comments-title {
+    font-family: var(--font-family);
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+.comment {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.comment:last-child {
+    border-bottom: none;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.comment-date {
+    font-size: 0.875rem;
+    color: #666;
+    margin-left: 1rem;
+}
+
+.comment-content {
+    margin-top: 0.5rem;
+}
+
+.comment-replies {
+    margin-left: 2rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--border-color);
+}
+
+/* ==========================================================================
+   Share Buttons
+   ========================================================================== */
+
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-family-sans);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.share-btn:hover {
+    opacity: 0.9;
+    text-decoration: none;
+}
+
+.share-btn.twitter {
+    background-color: #1DA1F2;
+    color: white;
+}
+
+.share-btn.linkedin {
+    background-color: #0077B5;
+    color: white;
+}
+
+.share-btn.facebook {
+    background-color: #4267B2;
+    color: white;
+}
+
+.share-btn.copy {
+    background-color: #6c757d;
+    color: white;
+}
+
+.share-btn.copy.copied {
+    background-color: #28a745;
+}
+
+/* ==========================================================================
+   Page Header (Tags, Search Results)
+   ========================================================================== */
+
+.page-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.page-title {
+    font-family: var(--font-family);
+    font-size: 2rem;
+    font-weight: normal;
+    color: var(--text-dark);
+}
+
+.page-description {
+    color: #666;
+    margin-top: 0.5rem;
+}
+
+/* All Tags Page */
+.tags-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.tag-item {
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s ease;
+}
+
+.tag-item:hover {
+    transform: translateY(-2px);
+}
+
+.tag-item a {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+.tag-item .count {
+    display: block;
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+/* ==========================================================================
+   Search Results
+   ========================================================================== */
+
+.search-results {
+    padding: 1.5rem 0;
+}
+
+.search-results h3 {
+    font-family: var(--font-family);
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.search-results ul {
+    list-style: none;
+}
+
+.search-results li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.search-results li:last-child {
+    border-bottom: none;
+}
+
+/* Search Page Form */
+.search-form-page {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.search-form-page input[type="search"] {
+    flex: 1;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    font-family: var(--font-family);
+    font-size: 1rem;
+}
+
+.search-form-page input[type="search"]:focus {
+    outline: none;
+    border-color: var(--nav-bg);
+}
+
+.search-results-page h3 {
+    font-family: var(--font-family);
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+/* ==========================================================================
+   About Page
+   ========================================================================== */
+
+.about-content {
+    /* Inherits from container */
+}
+
+.about-content .entry-header {
+    margin-bottom: 1.5rem;
+}
+
+.about-content .entry-title {
+    font-family: var(--font-family);
+    font-size: 2rem;
+    font-weight: normal;
+    color: var(--text-dark);
+}
+
+.about-content .entry-content p {
+    margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   404 Page
+   ========================================================================== */
+
+.error-page {
+    text-align: center;
+    padding: 60px 0;
+}
+
+.error-page h1 {
+    font-family: var(--font-family);
+    font-size: 4rem;
+    color: var(--nav-bg);
+}
+
+.error-page p {
+    font-size: 1.125rem;
+    margin: 1.5rem 0;
+}
+
+/* ==========================================================================
+   No Posts
+   ========================================================================== */
+
+.no-posts {
+    padding: 60px 0;
+    text-align: center;
+}
+
+/* ==========================================================================
+   Code Highlighting (Pygments)
+   ========================================================================== */
+
+.highlight {
+    background-color: #1e1e1e;
+    padding: 1.5rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+}
+
+.highlight pre {
+    margin: 0;
+    padding: 0;
+    background: none;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 900px) {
+    .site-wrapper {
+        margin: 20px;
+    }
+
+    .main-container {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        order: 2;
+        border-top: 1px solid var(--border-color);
+        padding-top: 30px;
+    }
+
+    .featured-post {
+        flex-direction: column;
+    }
+
+    .featured-image {
+        flex: none;
+        max-width: 100%;
+    }
+
+    .featured-image img {
+        min-height: 200px;
+    }
+
+    .featured-content {
+        padding: 20px 0 0;
+    }
+
+    .post-item {
+        flex-direction: column;
+    }
+
+    .post-thumbnail {
+        margin-right: 0;
+        margin-bottom: 15px;
+        max-width: 100%;
+    }
+
+    .post-thumbnail img {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    .site-wrapper {
+        margin: 10px;
+    }
+
+    .site-branding-area {
+        padding: 25px 20px 20px;
+    }
+
+    .nav-container {
+        padding: 0 20px;
+    }
+
+    .site-main {
+        padding: 20px;
+    }
+
+    .site-title {
+        font-size: 1.75rem;
+    }
+
+    .nav-menu {
+        flex-wrap: wrap;
+    }
+
+    .nav-menu a {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+    }
+
+    .featured-title {
+        font-size: 1.4rem;
+    }
+
+    .site-footer {
+        padding: 20px;
+    }
+
+    .share-buttons {
+        flex-direction: column;
+    }
+
+    .share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================================
+   HTMX Loading States
+   ========================================================================== */
+
+.htmx-request .htmx-indicator {
+    display: inline-block;
+}
+
+.htmx-indicator {
+    display: none;
+}
+
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--nav-bg);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Editor Styles (Admin Interface)
+   ========================================================================== */
+
+.editor-layout {
+    background-color: var(--card-bg);
+    min-height: 100vh;
+}
+
+.editor-header {
+    background-color: var(--nav-bg);
+    color: var(--text-primary);
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.editor-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border-color);
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: var(--nav-bg);
+    box-shadow: 0 0 0 3px rgba(205, 55, 45, 0.1);
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 200px;
+}
+
+.markdown-editor {
+    font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+    min-height: 400px;
+}
+
+/* Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    font-family: var(--font-family-sans);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background-color: var(--nav-bg);
+    color: var(--text-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--nav-hover);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: var(--text-primary);
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: var(--text-primary);
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Image Grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.image-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.image-item img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.image-item-actions {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.image-item:hover .image-item-actions {
+    opacity: 1;
+}
+
+/* Dashboard */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.dashboard-card {
+    background-color: var(--card-bg);
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.dashboard-card h2 {
+    font-family: var(--font-family);
+    font-size: 1.125rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--nav-bg);
+}
+
+.post-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-list-item:last-child {
+    border-bottom: none;
+}
+
+.post-list-item .status {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.post-list-item .status.draft {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.post-list-item .status.published {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.post-list-item .status.scheduled {
+    background-color: #17a2b8;
+    color: #fff;
+}

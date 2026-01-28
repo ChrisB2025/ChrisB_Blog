@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }} - ChrisB's Blog{% endblock %}
+
+{% block meta_description %}{{ post.excerpt|default:post.content_md|truncatewords:30 }}{% endblock %}
+
+{% block og_title %}{{ post.title }}{% endblock %}
+{% block og_description %}{{ post.excerpt|default:post.content_md|truncatewords:30 }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}
+{% if post.featured_image %}
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.file.url }}">
+{% endif %}
+{% endblock %}
+
+{% block twitter_title %}{{ post.title }}{% endblock %}
+{% block twitter_description %}{{ post.excerpt|default:post.content_md|truncatewords:30 }}{% endblock %}
+{% block twitter_image %}
+{% if post.featured_image %}
+<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.file.url }}">
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<article class="post-single">
+    <header class="post-header">
+        <h1 class="post-title">{{ post.title }}</h1>
+        <div class="post-meta">
+            <span class="author">{{ post.author.get_full_name|default:post.author.username }}</span>
+            <span class="separator">/</span>
+            <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"m/d/Y" }}</time>
+        </div>
+    </header>
+
+    {% if post.featured_image %}
+    <div class="post-featured-image-wrapper">
+        <img src="{{ post.featured_image.file.url }}" alt="{{ post.featured_image.alt_text|default:post.title }}" class="post-featured-image">
+    </div>
+    {% endif %}
+
+    <div class="post-content">
+        {{ post.content_html|safe }}
+    </div>
+
+    <footer class="post-footer">
+        {% if post.tags.exists %}
+        <div class="post-tags">
+            <strong>Tags:</strong>
+            {% for tag in post.tags.all %}
+            <a href="{{ tag.get_absolute_url }}" class="tag">{{ tag.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% include 'components/share_buttons.html' %}
+    </footer>
+</article>
+
+<!-- Post Navigation -->
+<nav class="post-navigation">
+    {% if previous_post %}
+    <a href="{{ previous_post.get_absolute_url }}" class="nav-previous">&larr; {{ previous_post.title }}</a>
+    {% endif %}
+    {% if next_post %}
+    <a href="{{ next_post.get_absolute_url }}" class="nav-next">{{ next_post.title }} &rarr;</a>
+    {% endif %}
+</nav>
+
+<!-- Comments Section -->
+<section class="comments-section">
+    <h2 class="comments-title">Comments ({{ comments|length }})</h2>
+
+    {% for comment in comments %}
+    {% include 'components/comment.html' %}
+    {% empty %}
+    <p>No comments yet.</p>
+    {% endfor %}
+</section>
+{% endblock %}

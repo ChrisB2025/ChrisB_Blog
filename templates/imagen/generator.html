@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}AI Image Generator - ChrisB Blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">AI Image Generator</h1>
+    <p class="page-description">Generate images using Google Imagen 4</p>
+    <a href="{% url 'editor:dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<div class="generator-form">
+    <form hx-post="{% url 'imagen:generate_custom' %}"
+          hx-target="#generation-result"
+          hx-swap="innerHTML"
+          hx-indicator="#loading">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="prompt" class="form-label">Image Prompt</label>
+            <textarea name="prompt" id="prompt" class="form-textarea" rows="4"
+                      placeholder="Describe the image you want to generate..."
+                      required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label for="aspect_ratio" class="form-label">Aspect Ratio</label>
+            <select name="aspect_ratio" id="aspect_ratio" class="form-select">
+                <option value="16:9">16:9 (Landscape - Blog Header)</option>
+                <option value="1:1">1:1 (Square)</option>
+                <option value="4:3">4:3 (Standard)</option>
+                <option value="3:4">3:4 (Portrait)</option>
+                <option value="9:16">9:16 (Vertical)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+            Generate Image
+            <span id="loading" class="htmx-indicator loading-spinner"></span>
+        </button>
+    </form>
+</div>
+
+<div id="generation-result"></div>
+
+<style>
+.generator-form {
+    background: #f9f9f9;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+#generation-result {
+    margin-top: 2rem;
+}
+
+.generated-image {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.generation-status {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+.generation-status.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.generation-status.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.generation-status.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+</style>
+{% endblock %}

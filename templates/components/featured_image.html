@@ -1,0 +1,11 @@
+{% if post.featured_image %}
+<img src="{{ post.featured_image.file.url }}" alt="{{ post.featured_image.alt_text }}" style="max-width: 100%;">
+{% else %}
+<p>No featured image selected.</p>
+{% endif %}
+
+<script>
+// Close any open modal
+var modal = document.querySelector('.modal-overlay');
+if (modal) modal.remove();
+</script>

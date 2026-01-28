@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Tags - ChrisB's Blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Tags</h1>
+    <p class="page-description">Browse posts by topic</p>
+</div>
+
+<div class="tags-grid">
+    {% for tag in tags %}
+    <div class="tag-item">
+        <a href="{{ tag.get_absolute_url }}">{{ tag.name }}</a>
+        <span class="count">{{ tag.post_count }} post{{ tag.post_count|pluralize }}</span>
+    </div>
+    {% empty %}
+    <p>No tags yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

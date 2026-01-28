@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Editor Dashboard - ChrisB Blog{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1 class="page-title">Editor Dashboard</h1>
+    <p>
+        <a href="{% url 'editor:post_create' %}" class="btn btn-primary">New Post</a>
+        <a href="{% url 'editor:image_manager' %}" class="btn btn-secondary">Image Manager</a>
+        <a href="{% url 'imagen:generator' %}" class="btn btn-secondary">AI Image Generator</a>
+    </p>
+</div>
+
+<div class="dashboard-grid">
+    <div class="dashboard-card">
+        <h2>Drafts ({{ drafts|length }})</h2>
+        {% for post in drafts %}
+        <div class="post-list-item">
+            <div>
+                <a href="{% url 'editor:post_edit' pk=post.pk %}">{{ post.title }}</a>
+                <span class="status draft">Draft</span>
+            </div>
+            <span class="date">{{ post.updated_at|date:"M j" }}</span>
+        </div>
+        {% empty %}
+        <p>No drafts.</p>
+        {% endfor %}
+    </div>
+
+    <div class="dashboard-card">
+        <h2>Published ({{ published|length }})</h2>
+        {% for post in published %}
+        <div class="post-list-item">
+            <div>
+                <a href="{% url 'editor:post_edit' pk=post.pk %}">{{ post.title }}</a>
+                <span class="status published">Published</span>
+            </div>
+            <span class="date">{{ post.published_at|date:"M j" }}</span>
+        </div>
+        {% empty %}
+        <p>No published posts.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

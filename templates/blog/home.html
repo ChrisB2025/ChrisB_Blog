@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}ChrisB's Blog{% endblock %}
+
+{% block content %}
+{% if page_obj %}
+    {% with featured_post=page_obj.0 %}
+    <!-- Featured Post (First Post) -->
+    <article class="featured-post">
+        {% if featured_post.featured_image %}
+        <div class="featured-image">
+            <a href="{{ featured_post.get_absolute_url }}">
+                <img src="{{ featured_post.featured_image.file.url }}" alt="{{ featured_post.featured_image.alt_text|default:featured_post.title }}">
+            </a>
+        </div>
+        {% endif %}
+        <div class="featured-content">
+            <h2 class="featured-title">
+                <a href="{{ featured_post.get_absolute_url }}">{{ featured_post.title }}</a>
+            </h2>
+            <div class="featured-excerpt">
+                {{ featured_post.excerpt|default:featured_post.content_md|truncatewords:50 }}
+            </div>
+            <a href="{{ featured_post.get_absolute_url }}" class="continue-reading">Continue reading <span class="arrow">&rarr;</span></a>
+        </div>
+    </article>
+    {% endwith %}
+
+    <!-- Rest of Posts -->
+    <div class="post-list" id="post-list">
+        {% for post in page_obj %}
+            {% if not forloop.first %}
+            {% include 'components/post_list_item.html' with post=post %}
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_next %}
+    <div class="pagination">
+        <a href="?page={{ page_obj.next_page_number }}" class="older-posts">&larr; Older posts</a>
+    </div>
+    {% endif %}
+{% else %}
+<div class="no-posts">
+    <p>No posts yet. Check back soon!</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ChrisB's Blog{% endblock %}</title>
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}ChrisB's Blog - Spurious commentary from a curious commentator{% endblock %}">
+    {% block meta_tags %}{% endblock %}
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{% block og_title %}ChrisB's Blog{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Spurious commentary from a curious commentator{% endblock %}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    {% block og_image %}{% endblock %}
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}ChrisB's Blog{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Spurious commentary from a curious commentator{% endblock %}">
+    {% block twitter_image %}{% endblock %}
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{% load static %}{% static 'favicon.ico' %}">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="ChrisB's Blog RSS Feed" href="{% url 'rss_feed' %}">
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+    <!-- Single White Container -->
+    <div class="site-wrapper">
+        <!-- Header -->
+        <header class="site-header">
+            <!-- Site Branding Area -->
+            <div class="site-branding-area">
+                <a href="{% url 'blog:home' %}" class="site-title">ChrisB's Blog</a>
+                <p class="site-tagline">Spurious commentary from a curious commentator</p>
+            </div>
+
+            <!-- Navigation Bar (red background) -->
+            <nav class="main-nav">
+                <div class="nav-container">
+                    <ul class="nav-menu">
+                        <li{% if request.resolver_match.url_name == 'home' %} class="active"{% endif %}>
+                            <a href="{% url 'blog:home' %}">Articles</a>
+                        </li>
+                        <li{% if request.resolver_match.url_name == 'about' %} class="active"{% endif %}>
+                            <a href="{% url 'blog:about' %}">About</a>
+                        </li>
+                        {% if user.is_staff %}
+                        <li><a href="{% url 'editor:dashboard' %}">Editor</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="site-main">
+            <div class="main-container">
+                <div class="content-area">
+                    {% block content %}{% endblock %}
+                </div>
+
+                <!-- Sidebar -->
+                <aside class="sidebar">
+                    <!-- Recent Posts (first, per WordPress theme) -->
+                    <div class="widget widget-recent-posts">
+                        <h3 class="widget-title">Recent Posts</h3>
+                        <ul class="recent-posts-list">
+                            {% for post in sidebar_recent_posts %}
+                            <li>
+                                <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                            </li>
+                            {% empty %}
+                            <li>No posts yet.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <!-- Search (second, per WordPress theme) -->
+                    <div class="widget widget-search">
+                        <h3 class="widget-title">Search</h3>
+                        <form action="{% url 'blog:search' %}" method="get" class="search-form">
+                            <input type="search" name="q" placeholder="Search ..." value="{{ request.GET.q }}"
+                                   hx-get="{% url 'blog:search' %}"
+                                   hx-trigger="keyup changed delay:300ms"
+                                   hx-target="#search-results"
+                                   hx-swap="innerHTML">
+                        </form>
+                    </div>
+
+                    <!-- Search Results (HTMX target) -->
+                    <div id="search-results"></div>
+
+                    <!-- Categories (third, per WordPress theme) -->
+                    <div class="widget widget-categories">
+                        <h3 class="widget-title">Categories</h3>
+                        <ul class="categories-list">
+                            <li><a href="{% url 'blog:home' %}">Articles</a></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <p class="footer-copyright">Proudly powered by <a href="https://www.djangoproject.com/">Django</a>.</p>
+        </footer>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

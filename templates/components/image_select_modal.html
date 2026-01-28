@@ -1,0 +1,59 @@
+<div class="modal-overlay" onclick="this.remove()">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h2>Select Featured Image</h2>
+
+        <div class="image-grid modal-grid">
+            {% for image in images %}
+            <div class="image-item selectable"
+                 hx-post="{% url 'editor:image_select' post_pk=post.pk %}"
+                 hx-vals='{"image_id": "{{ image.pk }}"}'
+                 hx-target="#featured-image-preview"
+                 hx-swap="innerHTML">
+                <img src="{{ image.file.url }}" alt="{{ image.alt_text }}">
+            </div>
+            {% empty %}
+            <p>No images available. Upload some images first.</p>
+            {% endfor %}
+        </div>
+
+        <button class="btn btn-secondary" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+    </div>
+</div>
+
+<style>
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    max-width: 800px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.modal-grid {
+    margin: 1rem 0;
+}
+
+.image-item.selectable {
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.image-item.selectable:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+</style>
