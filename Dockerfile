@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 # Set work directory
 WORKDIR /app
 
-# Install Poetry
-RUN pip install poetry
+# Install Poetry and export plugin
+RUN pip install poetry poetry-plugin-export
 
 # Copy dependency files
 COPY pyproject.toml poetry.lock* ./
