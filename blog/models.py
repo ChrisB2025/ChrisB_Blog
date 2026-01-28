@@ -176,18 +176,30 @@ class Post(models.Model):
 
     @property
     def first_image_url(self):
-        """Extract first image URL from content for thumbnail display."""
+        """Extract first external image URL from content for thumbnail display.
+
+        Skips local /uploads/ URLs since they don't persist on Railway's
+        ephemeral filesystem. Prefers external URLs (e.g., WordPress-hosted).
+        """
         import re
-        # Try HTML content first
+
+        def is_external_url(url):
+            return url and not url.startswith('/uploads/')
+
+        # Try HTML content first - find all images
         html_pattern = r'<img[^>]+src=["\']([^"\']+)["\']'
-        match = re.search(html_pattern, self.content_html or '')
-        if match:
-            return match.group(1)
-        # Fall back to markdown
+        for match in re.finditer(html_pattern, self.content_html or ''):
+            url = match.group(1)
+            if is_external_url(url):
+                return url
+
+        # Fall back to markdown - find all images
         md_pattern = r'!\[[^\]]*\]\(([^)]+)\)'
-        match = re.search(md_pattern, self.content_md or '')
-        if match:
-            return match.group(1)
+        for match in re.finditer(md_pattern, self.content_md or ''):
+            url = match.group(1)
+            if is_external_url(url):
+                return url
+
         return None
 
     @property
