@@ -174,6 +174,32 @@ class Post(models.Model):
     def is_published(self):
         return self.status == PostStatus.PUBLISHED and self.published_at and self.published_at <= timezone.now()
 
+    @property
+    def first_image_url(self):
+        """Extract first image URL from content for thumbnail display."""
+        import re
+        # Try HTML content first
+        html_pattern = r'<img[^>]+src=["\']([^"\']+)["\']'
+        match = re.search(html_pattern, self.content_html or '')
+        if match:
+            return match.group(1)
+        # Fall back to markdown
+        md_pattern = r'!\[[^\]]*\]\(([^)]+)\)'
+        match = re.search(md_pattern, self.content_md or '')
+        if match:
+            return match.group(1)
+        return None
+
+    @property
+    def thumbnail_url(self):
+        """Get thumbnail URL - featured image or first image from content."""
+        if self.featured_image:
+            try:
+                return self.featured_image.file.url
+            except Exception:
+                pass
+        return self.first_image_url
+
 
 class CommentStatus(models.TextChoices):
     PENDING = 'pending', 'Pending'
