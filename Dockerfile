@@ -42,8 +42,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY --chown=appuser:appuser . .
 
-# Create directories for static and media files
-RUN mkdir -p /app/staticfiles /app/uploads && \
+# Make start script executable and create directories
+RUN chmod +x /app/start.sh && \
+    mkdir -p /app/staticfiles /app/uploads && \
     chown -R appuser:appuser /app/staticfiles /app/uploads
 
 # Switch to non-root user
