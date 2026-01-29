@@ -37,9 +37,35 @@ if Post.objects.count() == 0:
 else:
     print(f'Posts already exist ({Post.objects.count()}). Skipping WordPress import.')
 
-# Note: Local /uploads/ URLs are now transformed to WordPress URLs
-# on-the-fly in the Post.first_image_url property, so no database
-# fixes are needed here.
+# Fix corrupted URLs in database (one-time repair)
+# Previous startup script corrupted URLs by repeatedly adding WordPress prefix
+import re
+
+def fix_corrupted_url(text):
+    """Fix URLs with repeated WordPress prefixes."""
+    if not text:
+        return text
+    # Pattern matches corrupted URLs with repeated wp-contenthttps:// sequences
+    # and extracts the final valid path
+    pattern = r'(https://chrisblanduk\.wordpress\.com/wp-content)(?:https://chrisblanduk\.wordpress\.com/wp-content)+(/uploads/\d{4}/\d{2}/[^)\s"\'<>\]]+)'
+    return re.sub(pattern, r'\1\2', text)
+
+print('Checking for corrupted URLs to repair...')
+repaired = 0
+for post in Post.objects.all():
+    original_md = post.content_md or ''
+    fixed_md = fix_corrupted_url(original_md)
+
+    if fixed_md != original_md:
+        post.content_md = fixed_md
+        post.save()  # This also regenerates content_html
+        repaired += 1
+        print(f'Repaired: {post.title}')
+
+if repaired:
+    print(f'Repaired {repaired} posts with corrupted URLs.')
+else:
+    print('No corrupted URLs found.')
 PYTHON_SCRIPT
 
 echo "Starting gunicorn on port $PORT..."
