@@ -45,10 +45,20 @@ def fix_corrupted_url(text):
     """Fix URLs with repeated WordPress prefixes."""
     if not text:
         return text
-    # Pattern matches corrupted URLs with repeated wp-contenthttps:// sequences
-    # and extracts the final valid path
-    pattern = r'(https://chrisblanduk\.wordpress\.com/wp-content)(?:https://chrisblanduk\.wordpress\.com/wp-content)+(/uploads/\d{4}/\d{2}/[^)\s"\'<>\]]+)'
-    return re.sub(pattern, r'\1\2', text)
+
+    # Pattern 1: repeated chrisblanduk.wordpress.com prefixes
+    pattern1 = r'(https://chrisblanduk\.wordpress\.com/wp-content)(?:https://chrisblanduk\.wordpress\.com/wp-content)+(/uploads/\d{4}/\d{2}/[^)\s"\'<>\]]+)'
+    text = re.sub(pattern1, r'\1\2', text)
+
+    # Pattern 2: chrisblanduk.com followed by chrisblanduk.wordpress.com
+    pattern2 = r'https://chrisblanduk\.com/wp-content(?:https://chrisblanduk\.wordpress\.com/wp-content)+(/uploads/\d{4}/\d{2}/[^)\s"\'<>\]]+)'
+    text = re.sub(pattern2, r'https://chrisblanduk.wordpress.com/wp-content\1', text)
+
+    # Pattern 3: any remaining wp-contenthttps sequences
+    pattern3 = r'(https://[^/]+/wp-content)https://[^/]+/wp-content(/uploads/[^)\s"\'<>\]]+)'
+    text = re.sub(pattern3, r'\1\2', text)
+
+    return text
 
 print('Checking for corrupted URLs to repair...')
 repaired = 0
