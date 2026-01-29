@@ -176,29 +176,34 @@ class Post(models.Model):
 
     @property
     def first_image_url(self):
-        """Extract first external image URL from content for thumbnail display.
+        """Extract first image URL from content for thumbnail display.
 
-        Skips local /uploads/ URLs since they don't persist on Railway's
-        ephemeral filesystem. Prefers external URLs (e.g., WordPress-hosted).
+        Converts local /uploads/ URLs to WordPress URLs since local files
+        don't persist on Railway's ephemeral filesystem.
         """
         import re
 
-        def is_external_url(url):
-            return url and not url.startswith('/uploads/')
+        def to_wordpress_url(url):
+            """Convert local /uploads/ URL to WordPress URL."""
+            if not url:
+                return None
+            # Convert /uploads/YYYY/MM/file or /uploads/images/YYYY/MM/file
+            match = re.match(r'/uploads/(?:images/)?(\d{4}/\d{2}/.+)', url)
+            if match:
+                return f'https://chrisblanduk.wordpress.com/wp-content/uploads/{match.group(1)}'
+            return url if not url.startswith('/uploads/') else None
 
-        # Try HTML content first - find all images
+        # Try HTML content first - find first image
         html_pattern = r'<img[^>]+src=["\']([^"\']+)["\']'
-        for match in re.finditer(html_pattern, self.content_html or ''):
-            url = match.group(1)
-            if is_external_url(url):
-                return url
+        match = re.search(html_pattern, self.content_html or '')
+        if match:
+            return to_wordpress_url(match.group(1))
 
-        # Fall back to markdown - find all images
+        # Fall back to markdown - find first image
         md_pattern = r'!\[[^\]]*\]\(([^)]+)\)'
-        for match in re.finditer(md_pattern, self.content_md or ''):
-            url = match.group(1)
-            if is_external_url(url):
-                return url
+        match = re.search(md_pattern, self.content_md or '')
+        if match:
+            return to_wordpress_url(match.group(1))
 
         return None
 

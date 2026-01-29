@@ -37,46 +37,9 @@ if Post.objects.count() == 0:
 else:
     print(f'Posts already exist ({Post.objects.count()}). Skipping WordPress import.')
 
-# Fix any local image URLs to use WordPress URLs
-import re
-from django.db import connection
-
-print('Checking for local image URLs to fix...')
-fixed_count = 0
-
-for post in Post.objects.all():
-    original_md = post.content_md or ''
-
-    # Check if this post has local uploads URLs and show first match
-    if '/uploads/' in original_md:
-        match = re.search(r'/uploads/[^\s"\'<>)]+', original_md)
-        if match:
-            print(f'Found in {post.title}: {match.group(0)[:60]}...')
-
-        # Replace local /uploads/ URLs with WordPress URLs
-        new_md = re.sub(
-            r'/uploads/(?:images/)?(\d{4}/\d{2}/[^)\s"\'<>]+)',
-            r'https://chrisblanduk.wordpress.com/wp-content/uploads/\1',
-            original_md
-        )
-        if new_md != original_md:
-            # Use direct SQL update to bypass any ORM issues
-            Post.objects.filter(pk=post.pk).update(content_md=new_md)
-            # Also update content_html by re-fetching and saving
-            post.refresh_from_db()
-            post.save()  # Regenerates content_html
-            fixed_count += 1
-            print(f'Fixed: {post.title}')
-
-if fixed_count:
-    print(f'Fixed {fixed_count} posts.')
-    # Force close connection and re-verify
-    connection.close()
-    test = Post.objects.filter(title__icontains='Five Generations').first()
-    if test:
-        print(f'Verify: /uploads/ in content = {"/uploads/" in (test.content_md or "")}')
-else:
-    print('No posts needed fixing.')
+# Note: Local /uploads/ URLs are now transformed to WordPress URLs
+# on-the-fly in the Post.first_image_url property, so no database
+# fixes are needed here.
 PYTHON_SCRIPT
 
 echo "Starting gunicorn on port $PORT..."
