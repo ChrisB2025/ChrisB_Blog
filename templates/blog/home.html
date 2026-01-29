@@ -7,10 +7,10 @@
     {% with featured_post=page_obj.0 %}
     <!-- Featured Post (First Post) -->
     <article class="featured-post">
-        {% if featured_post.featured_image %}
+        {% if featured_post.thumbnail_url %}
         <div class="featured-image">
             <a href="{{ featured_post.get_absolute_url }}">
-                <img src="{{ featured_post.featured_image.file.url }}" alt="{{ featured_post.featured_image.alt_text|default:featured_post.title }}">
+                <img src="{{ featured_post.thumbnail_url }}" alt="{{ featured_post.title }}">
             </a>
         </div>
         {% endif %}
