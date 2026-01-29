@@ -13,7 +13,7 @@
             <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
         </h2>
         <div class="post-item-excerpt">
-            {{ post.excerpt|default:post.content_md|truncatewords:30 }}
+            {{ post.plain_excerpt|truncatewords:30 }}
         </div>
         <div class="post-item-meta">
             <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"Y/m/d" }}</time>

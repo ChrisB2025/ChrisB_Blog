@@ -221,6 +221,40 @@ class Post(models.Model):
         """Get thumbnail URL from post content."""
         return self.first_image_url
 
+    @property
+    def plain_excerpt(self):
+        """Get plain text excerpt without markdown/HTML formatting."""
+        import re
+        from django.utils.html import strip_tags
+
+        # Use excerpt if available
+        if self.excerpt:
+            return self.excerpt
+
+        # Otherwise extract from content_html (strip HTML tags)
+        if self.content_html:
+            text = strip_tags(self.content_html)
+            # Clean up whitespace
+            text = re.sub(r'\s+', ' ', text).strip()
+            return text
+
+        # Fall back to content_md with markdown stripped
+        if self.content_md:
+            text = self.content_md
+            # Remove images
+            text = re.sub(r'!\[[^\]]*\]\([^)]+\)', '', text)
+            # Remove links but keep text
+            text = re.sub(r'\[([^\]]+)\]\([^)]+\)', r'\1', text)
+            # Remove headers
+            text = re.sub(r'^#+\s*', '', text, flags=re.MULTILINE)
+            # Remove bold/italic
+            text = re.sub(r'\*+([^*]+)\*+', r'\1', text)
+            # Clean up whitespace
+            text = re.sub(r'\s+', ' ', text).strip()
+            return text
+
+        return ''
+
 
 class CommentStatus(models.TextChoices):
     PENDING = 'pending', 'Pending'

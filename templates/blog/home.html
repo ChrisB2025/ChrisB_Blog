@@ -19,7 +19,7 @@
                 <a href="{{ featured_post.get_absolute_url }}">{{ featured_post.title }}</a>
             </h2>
             <div class="featured-excerpt">
-                {{ featured_post.excerpt|default:featured_post.content_md|truncatewords:50 }}
+                {{ featured_post.plain_excerpt|truncatewords:50 }}
             </div>
             <a href="{{ featured_post.get_absolute_url }}" class="continue-reading">Continue reading <span class="arrow">&rarr;</span></a>
         </div>
