@@ -39,32 +39,41 @@ else:
 
 # Fix any local image URLs to use WordPress URLs
 import re
+from django.db import connection, transaction
+
 print('Checking for local image URLs to fix...')
 fixed_count = 0
-for post in Post.objects.all():
-    original_md = post.content_md or ''
 
-    # Check if this post has local uploads URLs and show first match
-    if '/uploads/' in original_md:
-        match = re.search(r'/uploads/[^\s"\'<>)]+', original_md)
-        if match:
-            print(f'Found in {post.title}: {match.group(0)[:60]}...')
+with transaction.atomic():
+    for post in Post.objects.all():
+        original_md = post.content_md or ''
 
-    # Replace local /uploads/ URLs with WordPress URLs
-    # Pattern: /uploads/images/YYYY/MM/filename or /uploads/YYYY/MM/filename
-    new_md = re.sub(
-        r'/uploads/(?:images/)?(\d{4}/\d{2}/[^)\s"\'<>]+)',
-        r'https://chrisblanduk.wordpress.com/wp-content/uploads/\1',
-        original_md
-    )
-    if new_md != original_md:
-        post.content_md = new_md
-        post.save()  # This regenerates content_html
-        fixed_count += 1
-        print(f'Fixed image URLs in: {post.title}')
+        # Check if this post has local uploads URLs and show first match
+        if '/uploads/' in original_md:
+            match = re.search(r'/uploads/[^\s"\'<>)]+', original_md)
+            if match:
+                print(f'Found in {post.title}: {match.group(0)[:60]}...')
+
+        # Replace local /uploads/ URLs with WordPress URLs
+        # Pattern: /uploads/images/YYYY/MM/filename or /uploads/YYYY/MM/filename
+        new_md = re.sub(
+            r'/uploads/(?:images/)?(\d{4}/\d{2}/[^)\s"\'<>]+)',
+            r'https://chrisblanduk.wordpress.com/wp-content/uploads/\1',
+            original_md
+        )
+        if new_md != original_md:
+            post.content_md = new_md
+            post.save()  # This regenerates content_html
+            fixed_count += 1
+            print(f'Fixed image URLs in: {post.title}')
 
 if fixed_count:
     print(f'Fixed {fixed_count} posts with local image URLs.')
+    # Verify the fix persisted
+    test_post = Post.objects.filter(title__icontains='Five Generations').first()
+    if test_post:
+        has_local = '/uploads/' in (test_post.content_md or '')
+        print(f'Verification - Five Generations still has /uploads/: {has_local}')
 else:
     print('No posts needed fixing.')
 PYTHON_SCRIPT
