@@ -222,6 +222,13 @@ class Post(models.Model):
         return self.first_image_url
 
     @property
+    def thumbnail_in_content(self):
+        """Check if thumbnail URL is already present in content_html."""
+        if not self.thumbnail_url or not self.content_html:
+            return False
+        return self.thumbnail_url in self.content_html
+
+    @property
     def plain_excerpt(self):
         """Get plain text excerpt without markdown/HTML formatting."""
         import re

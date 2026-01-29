@@ -33,7 +33,7 @@
         </div>
     </header>
 
-    {% if post.thumbnail_url %}
+    {% if post.thumbnail_url and not post.thumbnail_in_content %}
     <div class="post-featured-image-wrapper">
         <img src="{{ post.thumbnail_url }}" alt="{{ post.title }}" class="post-featured-image">
     </div>
