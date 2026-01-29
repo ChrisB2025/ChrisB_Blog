@@ -43,16 +43,17 @@ print('Checking for local image URLs to fix...')
 fixed_count = 0
 for post in Post.objects.all():
     original_md = post.content_md or ''
-    original_html = post.content_html or ''
 
-    # Check if this post has local uploads URLs
-    has_local_url = '/uploads/' in original_md or '/uploads/' in original_html
-    if has_local_url:
-        print(f'Found local URL in: {post.title}')
+    # Check if this post has local uploads URLs and show first match
+    if '/uploads/' in original_md:
+        match = re.search(r'/uploads/[^\s"\'<>)]+', original_md)
+        if match:
+            print(f'Found in {post.title}: {match.group(0)[:60]}...')
 
-    # Replace local /uploads/ URLs with WordPress URLs (handles both md and html formats)
+    # Replace local /uploads/ URLs with WordPress URLs
+    # Pattern: /uploads/images/YYYY/MM/filename or /uploads/YYYY/MM/filename
     new_md = re.sub(
-        r'/uploads/images/(\d{4}/\d{2}/[^)\s"\'<>]+)',
+        r'/uploads/(?:images/)?(\d{4}/\d{2}/[^)\s"\'<>]+)',
         r'https://chrisblanduk.wordpress.com/wp-content/uploads/\1',
         original_md
     )
