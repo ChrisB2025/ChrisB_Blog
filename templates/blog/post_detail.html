@@ -9,16 +9,16 @@
 {% block og_description %}{{ post.excerpt|default:post.content_md|truncatewords:30 }}{% endblock %}
 {% block og_type %}article{% endblock %}
 {% block og_image %}
-{% if post.featured_image %}
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.file.url }}">
+{% if post.thumbnail_url %}
+<meta property="og:image" content="{{ post.thumbnail_url }}">
 {% endif %}
 {% endblock %}
 
 {% block twitter_title %}{{ post.title }}{% endblock %}
 {% block twitter_description %}{{ post.excerpt|default:post.content_md|truncatewords:30 }}{% endblock %}
 {% block twitter_image %}
-{% if post.featured_image %}
-<meta name="twitter:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.file.url }}">
+{% if post.thumbnail_url %}
+<meta name="twitter:image" content="{{ post.thumbnail_url }}">
 {% endif %}
 {% endblock %}
 
@@ -33,9 +33,9 @@
         </div>
     </header>
 
-    {% if post.featured_image %}
+    {% if post.thumbnail_url %}
     <div class="post-featured-image-wrapper">
-        <img src="{{ post.featured_image.file.url }}" alt="{{ post.featured_image.alt_text|default:post.title }}" class="post-featured-image">
+        <img src="{{ post.thumbnail_url }}" alt="{{ post.title }}" class="post-featured-image">
     </div>
     {% endif %}
 
