@@ -187,7 +187,16 @@ class Post(models.Model):
             """Convert local /uploads/ URL to WordPress URL."""
             if not url:
                 return None
-            # Convert /uploads/YYYY/MM/file or /uploads/images/YYYY/MM/file
+            # Already a full URL (WordPress or other external)
+            if url.startswith('http'):
+                # Fix corrupted URLs with repeated WordPress prefixes
+                if 'wordpress.com' in url:
+                    # Extract the final valid path
+                    match = re.search(r'/uploads/(?:images/)?(\d{4}/\d{2}/[^)\s"\'<>]+)$', url)
+                    if match:
+                        return f'https://chrisblanduk.wordpress.com/wp-content/uploads/{match.group(1)}'
+                return url
+            # Convert local /uploads/YYYY/MM/file or /uploads/images/YYYY/MM/file
             match = re.match(r'/uploads/(?:images/)?(\d{4}/\d{2}/.+)', url)
             if match:
                 return f'https://chrisblanduk.wordpress.com/wp-content/uploads/{match.group(1)}'
