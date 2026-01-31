@@ -47,10 +47,7 @@ RUN chmod +x /app/start.sh && \
     mkdir -p /app/staticfiles /app/uploads && \
     chown -R appuser:appuser /app/staticfiles /app/uploads
 
-# Switch to non-root user
-USER appuser
-
-# Collect static files
+# Collect static files (as root, files will be readable)
 RUN python manage.py collectstatic --noinput
 
 # Expose port
@@ -60,5 +57,5 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health/')" || exit 1
 
-# Run gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "--workers", "2", "--threads", "4", "chrisb_blog.wsgi:application"]
+# Run start script (as root to fix volume permissions)
+CMD ["/app/start.sh"]
