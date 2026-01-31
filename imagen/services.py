@@ -4,6 +4,7 @@ Vertex AI Imagen 4 integration service.
 
 import base64
 import io
+import json
 import logging
 import os
 from typing import Optional
@@ -12,6 +13,19 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 
 logger = logging.getLogger(__name__)
+
+
+def get_google_credentials():
+    """Get Google Cloud credentials from environment variable or default."""
+    credentials_json = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS_JSON')
+
+    if credentials_json:
+        from google.oauth2 import service_account
+        credentials_info = json.loads(credentials_json)
+        return service_account.Credentials.from_service_account_info(credentials_info)
+
+    # Fall back to Application Default Credentials (for local dev)
+    return None
 
 
 class ImagenService:
@@ -30,7 +44,12 @@ class ImagenService:
                 import vertexai
                 from vertexai.preview.vision_models import ImageGenerationModel
 
-                vertexai.init(project=self.project_id, location=self.location)
+                credentials = get_google_credentials()
+                vertexai.init(
+                    project=self.project_id,
+                    location=self.location,
+                    credentials=credentials
+                )
                 self._client = ImageGenerationModel.from_pretrained("imagen-3.0-generate-001")
             except Exception as e:
                 logger.error(f"Failed to initialize Vertex AI client: {e}")

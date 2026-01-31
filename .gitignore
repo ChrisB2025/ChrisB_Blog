@@ -72,10 +72,14 @@ celerybeat.pid
 secrets/
 
 # Poetry
-poetry.lock
+# (poetry.lock should be committed for reproducible builds)
 
 # Frame files (optional)
 .frame/
 
 # Claude files
 .claude/
+
+# Google Cloud service account keys
+gen-lang-*.json
+*-credentials.json
