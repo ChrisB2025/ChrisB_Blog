@@ -4,8 +4,11 @@ set -e
 # Ensure uploads directory exists with correct permissions
 echo "Setting up uploads directory..."
 UPLOAD_DIR="${UPLOADS_PATH:-/app/uploads}"
+# Railway volumes are mounted as root, need to change ownership
+if [ -d "$UPLOAD_DIR" ]; then
+    chown -R "$(id -u):$(id -g)" "$UPLOAD_DIR" 2>/dev/null || true
+fi
 mkdir -p "$UPLOAD_DIR/images" 2>/dev/null || true
-chmod -R 755 "$UPLOAD_DIR" 2>/dev/null || true
 
 echo "Running migrations..."
 python manage.py migrate --noinput
