@@ -174,6 +174,9 @@ MEDIA_ROOT = os.environ.get('UPLOADS_PATH', BASE_DIR / 'uploads')
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Authentication
+LOGIN_URL = '/admin/login/'
+
 
 # Vertex AI / Google Cloud
 GOOGLE_CLOUD_PROJECT = os.environ.get('GOOGLE_CLOUD_PROJECT')
