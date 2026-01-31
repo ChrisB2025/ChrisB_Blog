@@ -38,6 +38,6 @@ urlpatterns = [
     path('', include('blog.urls')),
 ]
 
-# Serve media files in development
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# Serve media files (needed for user uploads and AI-generated images)
+# In production, consider using a CDN or cloud storage for better performance
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
