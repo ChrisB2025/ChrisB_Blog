@@ -78,5 +78,11 @@ else:
     print('No corrupted URLs found.')
 PYTHON_SCRIPT
 
-echo "Starting gunicorn on port $PORT..."
-exec gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 2 --threads 4 --log-level info --access-logfile - --error-logfile - chrisb_blog.wsgi:application
+# Check if running as worker
+if [ "$WORKER_MODE" = "true" ]; then
+    echo "Starting Celery worker..."
+    exec celery -A chrisb_blog worker --loglevel=info
+else
+    echo "Starting gunicorn on port $PORT..."
+    exec gunicorn --bind 0.0.0.0:${PORT:-8000} --workers 2 --threads 4 --log-level info --access-logfile - --error-logfile - chrisb_blog.wsgi:application
+fi
