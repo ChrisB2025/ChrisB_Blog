@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Ensure uploads directory exists with correct permissions
+echo "Setting up uploads directory..."
+mkdir -p /app/uploads/images
+chmod -R 755 /app/uploads
+
 echo "Running migrations..."
 python manage.py migrate --noinput
 
